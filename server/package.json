@@ -1,0 +1,19 @@
+{
+  "name": "taskly-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "dev" : "nodemon src/server.js",
+    "start" : "node src/server.js"
+  },
+  "keywords": [],
+  "author": "Ketan Rakesh",
+  "license": "ISC",
+  "description": "Express backend for the Taskly task management application.",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
