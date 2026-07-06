@@ -25,5 +25,5 @@ jobs:
               issue_number: issueNumber,
               assignees: [owner]
             });
-            console.log(`Assigned issue #${issueNumber} to ${owner});
+            console.log(`Assigned issue #${issueNumber} to ${owner}`);
 
