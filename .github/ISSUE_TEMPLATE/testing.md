@@ -1,7 +1,7 @@
 ---
 name: Testing
 about: Verify the implementation and behavior of a feature, workflow, or infrastructure component
-title: "[Test]: "
+title: "[Test]: Verify <Component Name>"
 labels: ""
 assignees: ""
 ---
