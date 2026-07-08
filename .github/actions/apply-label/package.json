@@ -5,7 +5,6 @@
   "description": "Reusable GitHub Action for automatic issue and PR labeling",
   "author": "Ketan Rakesh",
   "license": "MIT",
-  "type": "module",
   "scripts": {
     "build": "esbuild src/index.ts --bundle --platform=node --target=node24 --sourcemap --outfile=dist/index.js"
   },
