@@ -1,11 +1,13 @@
 name: PR Auto Labeling
 
 on:
-    pull_request:
+    pull_request_target:
         types: [opened, synchronize, reopened]
 
 permissions:
+    contents: read
     issues: write
+    pull-requests: write
 
 jobs:
     label:
