@@ -1,0 +1,18 @@
+{
+  "issue": {
+    "[Feature]:": "feature",
+    "[Bug]:": "bug",
+    "[Docs]:": "documentation",
+    "[Refactor]:": "refactor",
+    "[Chore]:": "chore",
+    "[Test]:": "testing"
+  },
+  "pr": {
+    "feature/": "feature",
+    "fix/": "bug",
+    "docs/": "documentation",
+    "refactor/": "refactor",
+    "chore/": "chore",
+    "ci/": "ci"
+  }
+}

@@ -1,0 +1,18 @@
+name: Apply Label
+
+description: Apply labels to issues and pull requests based on repository configuration.
+
+author: Ketan Rakesh
+
+inputs:
+  mode:
+    description: Event type to process (issue or pr)
+    required: true
+
+  github-token:
+    description: GitHub token used to authenticate API requests
+    required: true
+
+runs:
+  using: node24
+  main: dist/index.js

@@ -1,0 +1,21 @@
+{
+  "name": "apply-label",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reusable GitHub Action for automatic issue and PR labeling",
+  "author": "Ketan Rakesh",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node24 --sourcemap --outfile=dist/index.js"
+  },
+  "dependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.12",
+    "typescript": "^5.8.0"
+  }
+}
