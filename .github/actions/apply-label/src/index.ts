@@ -16,8 +16,7 @@ async function applyLabel(): Promise<void> {
 
     try {
 
-        const mode = core.getInput("mode");
-
+        const mode = core.getInput("mode").trim();
         const token = core.getInput("github-token");
 
         if (!mode) {
@@ -33,13 +32,12 @@ async function applyLabel(): Promise<void> {
         const context = github.context;
 
         const apiContext: ApiContext = {
-
             owner: context.repo.owner,
-
             repo: context.repo.repo,
-
-            issue_number: context.issue.number
-
+            issue_number:
+                mode === "issue"
+                    ? context.payload.issue.number
+                    : context.payload.pull_request.number
         };
 
         const configPath = path.join(
@@ -52,7 +50,7 @@ async function applyLabel(): Promise<void> {
             fs.readFileSync(configPath, "utf8")
         ) as Record<string, LabelMappings>;
 
-        if (!(mode in config)) {
+        if (!Object.hasOwn(config, mode)) {
             throw new Error(`Unsupported mode '${mode}'.`);
         }
 

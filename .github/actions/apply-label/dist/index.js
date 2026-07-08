@@ -23878,19 +23878,22 @@ async function applySelectedLabel(octokit, apiContext, selectedLabel) {
     warning("No matching label found.");
     return;
   }
-  await octokit.rest.issues.addLabels({
-    ...apiContext,
-    labels: [selectedLabel]
-  });
-  info(
-    `Applied label '${selectedLabel}' to #${apiContext.issue_number}.`
-  );
+  try {
+    await octokit.rest.issues.addLabels({
+      ...apiContext,
+      labels: [selectedLabel]
+    });
+    info(`Applied label '${selectedLabel}'.`);
+  } catch (err) {
+    error(JSON.stringify(err, null, 2));
+    throw err;
+  }
 }
 
 // src/index.ts
 async function applyLabel() {
   try {
-    const mode = getInput("mode");
+    const mode = getInput("mode").trim();
     const token = getInput("github-token");
     if (!mode) {
       throw new Error("Input 'mode' is required.");
@@ -23903,7 +23906,7 @@ async function applyLabel() {
     const apiContext = {
       owner: context3.repo.owner,
       repo: context3.repo.repo,
-      issue_number: context3.issue.number
+      issue_number: mode === "issue" ? context3.payload.issue.number : context3.payload.pull_request.number
     };
     const configPath = import_node_path.default.join(
       process.env.GITHUB_WORKSPACE,
@@ -23913,7 +23916,7 @@ async function applyLabel() {
     const config = JSON.parse(
       import_node_fs.default.readFileSync(configPath, "utf8")
     );
-    if (!(mode in config)) {
+    if (!Object.hasOwn(config, mode)) {
       throw new Error(`Unsupported mode '${mode}'.`);
     }
     const payload = mode === "issue" ? context3.payload.issue : context3.payload.pull_request;
