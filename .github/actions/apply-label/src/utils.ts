@@ -47,12 +47,16 @@ export async function applySelectedLabel(
         return;
     }
 
-    await octokit.rest.issues.addLabels({
-        ...apiContext,
-        labels: [selectedLabel]
-    });
+    try {
+        await octokit.rest.issues.addLabels({
+            ...apiContext,
+            labels: [selectedLabel]
+        });
 
-    core.info(
-        `Applied label '${selectedLabel}' to #${apiContext.issue_number}.`
-    );
+        core.info(`Applied label '${selectedLabel}'.`);
+    }
+    catch (err: any) {
+        core.error(JSON.stringify(err, null, 2));
+        throw err;
+    }
 }

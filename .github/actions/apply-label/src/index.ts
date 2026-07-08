@@ -33,13 +33,12 @@ async function applyLabel(): Promise<void> {
         const context = github.context;
 
         const apiContext: ApiContext = {
-
             owner: context.repo.owner,
-
             repo: context.repo.repo,
-
-            issue_number: context.issue.number
-
+            issue_number:
+                mode === "issue"
+                    ? context.payload.issue.number
+                    : context.payload.pull_request.number
         };
 
         const configPath = path.join(
@@ -79,6 +78,14 @@ async function applyLabel(): Promise<void> {
             payload.labels,
             Object.values(labelMappings)
         );
+
+        core.info(`Mode: ${mode}`);
+        core.info(`Owner: ${apiContext.owner}`);
+        core.info(`Repo: ${apiContext.repo}`);
+        core.info(`Issue Number: ${apiContext.issue_number}`);
+        core.info(`Selected Label: ${selectedLabel}`);
+        core.info(`Branch: ${source}`);
+        core.info(`Event: ${context.eventName}`);
 
         await applySelectedLabel(
             octokit,

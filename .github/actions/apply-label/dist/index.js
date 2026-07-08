@@ -23878,13 +23878,16 @@ async function applySelectedLabel(octokit, apiContext, selectedLabel) {
     warning("No matching label found.");
     return;
   }
-  await octokit.rest.issues.addLabels({
-    ...apiContext,
-    labels: [selectedLabel]
-  });
-  info(
-    `Applied label '${selectedLabel}' to #${apiContext.issue_number}.`
-  );
+  try {
+    await octokit.rest.issues.addLabels({
+      ...apiContext,
+      labels: [selectedLabel]
+    });
+    info(`Applied label '${selectedLabel}'.`);
+  } catch (err) {
+    error(JSON.stringify(err, null, 2));
+    throw err;
+  }
 }
 
 // src/index.ts
@@ -23903,7 +23906,7 @@ async function applyLabel() {
     const apiContext = {
       owner: context3.repo.owner,
       repo: context3.repo.repo,
-      issue_number: context3.issue.number
+      issue_number: mode === "issue" ? context3.payload.issue.number : context3.payload.pull_request.number
     };
     const configPath = import_node_path.default.join(
       process.env.GITHUB_WORKSPACE,
@@ -23929,6 +23932,13 @@ async function applyLabel() {
       payload.labels,
       Object.values(labelMappings)
     );
+    info(`Mode: ${mode}`);
+    info(`Owner: ${apiContext.owner}`);
+    info(`Repo: ${apiContext.repo}`);
+    info(`Issue Number: ${apiContext.issue_number}`);
+    info(`Selected Label: ${selectedLabel}`);
+    info(`Branch: ${source}`);
+    info(`Event: ${context3.eventName}`);
     await applySelectedLabel(
       octokit,
       apiContext,
