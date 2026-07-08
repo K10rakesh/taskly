@@ -23850,8 +23850,8 @@ function getOctokit(token, options, ...additionalPlugins) {
 }
 
 // src/index.ts
-var import_node_fs = __toESM(require("node:fs"), 1);
-var import_node_path = __toESM(require("node:path"), 1);
+var import_node_fs = __toESM(require("node:fs"));
+var import_node_path = __toESM(require("node:path"));
 
 // src/utils.ts
 function findMatchingValue(source, labelMappings) {
@@ -23965,3 +23965,4 @@ content-type/dist/index.js:
   (* v8 ignore next -- @preserve *)
   (* v8 ignore else -- @preserve *)
 */
+//# sourceMappingURL=index.js.map
