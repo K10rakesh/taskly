@@ -1,0 +1,21 @@
+name: PR Auto Labeling
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+permissions:
+    issues: write
+
+jobs:
+    label:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v7
+              
+            - name: Apply Labels
+              uses: ./.github/actions/apply-label
+              with:
+                mode: pr
+                github-token: ${{secrets.GITHUB_TOKEN}}
