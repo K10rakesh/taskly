@@ -13,6 +13,7 @@
     "docs/": "documentation",
     "refactor/": "refactor",
     "chore/": "chore",
-    "ci/": "ci"
+    "ci/": "ci",
+    "test/": "testing"
   }
 }
