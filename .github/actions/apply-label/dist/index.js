@@ -23893,7 +23893,7 @@ async function applySelectedLabel(octokit, apiContext, selectedLabel) {
 // src/index.ts
 async function applyLabel() {
   try {
-    const mode = getInput("mode");
+    const mode = getInput("mode").trim();
     const token = getInput("github-token");
     if (!mode) {
       throw new Error("Input 'mode' is required.");
@@ -23916,7 +23916,7 @@ async function applyLabel() {
     const config = JSON.parse(
       import_node_fs.default.readFileSync(configPath, "utf8")
     );
-    if (!(mode in config)) {
+    if (!Object.hasOwn(config, mode)) {
       throw new Error(`Unsupported mode '${mode}'.`);
     }
     const payload = mode === "issue" ? context3.payload.issue : context3.payload.pull_request;
@@ -23932,13 +23932,6 @@ async function applyLabel() {
       payload.labels,
       Object.values(labelMappings)
     );
-    info(`Mode: ${mode}`);
-    info(`Owner: ${apiContext.owner}`);
-    info(`Repo: ${apiContext.repo}`);
-    info(`Issue Number: ${apiContext.issue_number}`);
-    info(`Selected Label: ${selectedLabel}`);
-    info(`Branch: ${source}`);
-    info(`Event: ${context3.eventName}`);
     await applySelectedLabel(
       octokit,
       apiContext,

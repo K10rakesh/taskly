@@ -16,8 +16,7 @@ async function applyLabel(): Promise<void> {
 
     try {
 
-        const mode = core.getInput("mode");
-
+        const mode = core.getInput("mode").trim();
         const token = core.getInput("github-token");
 
         if (!mode) {
@@ -51,7 +50,7 @@ async function applyLabel(): Promise<void> {
             fs.readFileSync(configPath, "utf8")
         ) as Record<string, LabelMappings>;
 
-        if (!(mode in config)) {
+        if (!Object.hasOwn(config, mode)) {
             throw new Error(`Unsupported mode '${mode}'.`);
         }
 
@@ -78,14 +77,6 @@ async function applyLabel(): Promise<void> {
             payload.labels,
             Object.values(labelMappings)
         );
-
-        core.info(`Mode: ${mode}`);
-        core.info(`Owner: ${apiContext.owner}`);
-        core.info(`Repo: ${apiContext.repo}`);
-        core.info(`Issue Number: ${apiContext.issue_number}`);
-        core.info(`Selected Label: ${selectedLabel}`);
-        core.info(`Branch: ${source}`);
-        core.info(`Event: ${context.eventName}`);
 
         await applySelectedLabel(
             octokit,
