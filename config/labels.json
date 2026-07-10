@@ -53,7 +53,8 @@
         "[Docs]:": "documentation",
         "[Refactor]:": "refactor",
         "[Chore]:": "chore",
-        "[Test]:": "testing"
+        "[Test]:": "testing",
+        "[Security]:": "security"
     },
 
     "pr": {
