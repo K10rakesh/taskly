@@ -1,0 +1,24 @@
+name: Sync Labels
+
+description: Synchronize repository labels with config/labels.json
+
+author: Ketan Rakesh
+
+inputs:
+    github-token:
+        description: GitHub token used for authentication
+        required: true
+
+    prune:
+        description: Delete labels not defined in labels.json
+        required: false
+        default: "false"
+
+    dry-run:
+        description: Preview changes without modifying labels
+        required: false
+        default: "false"
+
+runs:
+    using: node24
+    main: dist/index.js
