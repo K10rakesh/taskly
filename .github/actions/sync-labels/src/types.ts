@@ -7,3 +7,9 @@ export interface LabelDefinition {
 export interface LabelsConfig {
     labels: LabelDefinition[];
 }
+
+export interface RepositoryLabel {
+    name: string;
+    color: string;
+    description: string | null;
+}
