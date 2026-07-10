@@ -13,3 +13,12 @@ export interface RepositoryLabel {
     color: string;
     description: string | null;
 }
+
+export interface GitHubContext {
+    owner: string;
+    repo: string;
+}
+
+export interface SyncOptions {
+    dryRun: boolean;
+}

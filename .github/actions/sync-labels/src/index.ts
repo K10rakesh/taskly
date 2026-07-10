@@ -4,7 +4,15 @@ import * as github from "@actions/github";
 import fs from "node:fs";
 import path from "node:path";
 
-import { LabelsConfig, RepositoryLabel } from "./types";
+import {
+    LabelsConfig,
+    RepositoryLabel
+} from "./types";
+
+import {
+    createLabel,
+    updateLabel
+} from "./github";
 
 async function syncLabels(): Promise<void> {
 
@@ -29,6 +37,15 @@ async function syncLabels(): Promise<void> {
 
         const octokit = github.getOctokit(token);
         const context = github.context;
+
+        const gitHubContext = {
+            owner: context.repo.owner,
+            repo: context.repo.repo
+        };
+
+        const options = {
+            dryRun
+        };
 
         const configPath = path.join(
             workspace,
@@ -85,6 +102,10 @@ async function syncLabels(): Promise<void> {
             `Found ${existingLabels.length} repository labels.`
         );
 
+        let created = 0;
+        let updated = 0;
+        let skipped = 0;
+
         for (const desiredLabel of desiredLabels) {
 
             const existingLabel =
@@ -92,29 +113,14 @@ async function syncLabels(): Promise<void> {
 
             if (!existingLabel) {
 
-                if (dryRun) {
+                await createLabel(
+                    octokit,
+                    gitHubContext,
+                    desiredLabel,
+                    options
+                );
 
-                    core.info(
-                        `[Dry Run] Would create '${desiredLabel.name}'.`
-                    );
-
-                }
-                else {
-
-                    await octokit.rest.issues.createLabel({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        name: desiredLabel.name,
-                        color: desiredLabel.color,
-                        description: desiredLabel.description
-                    });
-
-                    core.info(
-                        `Created '${desiredLabel.name}'.`
-                    );
-
-                }
-
+                created++;
                 continue;
 
             }
@@ -124,29 +130,14 @@ async function syncLabels(): Promise<void> {
                 (existingLabel.description ?? "") !== desiredLabel.description
             ) {
 
-                if (dryRun) {
+                await updateLabel(
+                    octokit,
+                    gitHubContext,
+                    desiredLabel,
+                    options
+                );
 
-                    core.info(
-                        `[Dry Run] Would update '${desiredLabel.name}'.`
-                    );
-
-                }
-                else {
-
-                    await octokit.rest.issues.updateLabel({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        name: desiredLabel.name,
-                        color: desiredLabel.color,
-                        description: desiredLabel.description
-                    });
-
-                    core.info(
-                        `Updated '${desiredLabel.name}'.`
-                    );
-
-                }
-
+                updated++;
                 continue;
 
             }
@@ -155,7 +146,15 @@ async function syncLabels(): Promise<void> {
                 `Skipping '${desiredLabel.name}'.`
             );
 
+            skipped++;
+
         }
+
+        core.info("Synchronization completed.");
+
+        core.info(`Created : ${created}`);
+        core.info(`Updated : ${updated}`);
+        core.info(`Skipped : ${skipped}`);
 
     }
     catch (err) {
