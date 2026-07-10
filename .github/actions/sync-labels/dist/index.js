@@ -23913,6 +23913,22 @@ async function updateLabel(octokit, context2, label, options) {
   });
   core.info(`Updated '${label.name}'.`);
 }
+async function deleteLabel(octokit, context2, labelName, options) {
+  if (options.dryRun) {
+    core.info(
+      `[Dry Run] Would delete '${labelName}'.`
+    );
+    return;
+  }
+  await octokit.rest.issues.deleteLabel({
+    owner: context2.owner,
+    repo: context2.repo,
+    name: labelName
+  });
+  core.info(
+    `Deleted '${labelName}'.`
+  );
+}
 
 // src/index.ts
 async function syncLabels() {
@@ -23973,6 +23989,9 @@ async function syncLabels() {
         label
       ])
     );
+    const desiredLabelNames = new Set(
+      desiredLabels.map((label) => label.name)
+    );
     core2.info(
       `Loaded ${desiredLabels.length} configured labels.`
     );
@@ -23982,6 +24001,7 @@ async function syncLabels() {
     let created = 0;
     let updated = 0;
     let skipped = 0;
+    let deleted = 0;
     for (const desiredLabel of desiredLabels) {
       const existingLabel = existingLabelMap.get(desiredLabel.name);
       if (!existingLabel) {
@@ -24009,10 +24029,25 @@ async function syncLabels() {
       );
       skipped++;
     }
+    if (prune) {
+      for (const existingLabel of existingLabels) {
+        if (desiredLabelNames.has(existingLabel.name)) {
+          continue;
+        }
+        await deleteLabel(
+          octokit,
+          gitHubContext,
+          existingLabel.name,
+          options
+        );
+        deleted++;
+      }
+    }
     core2.info("Synchronization completed.");
     core2.info(`Created : ${created}`);
     core2.info(`Updated : ${updated}`);
     core2.info(`Skipped : ${skipped}`);
+    core2.info(`Deleted : ${deleted}`);
   } catch (err) {
     if (err instanceof Error) {
       core2.setFailed(err.message);

@@ -52,3 +52,34 @@ export async function updateLabel(
 
     core.info(`Updated '${label.name}'.`);
 }
+
+export async function deleteLabel(
+    octokit: ReturnType<typeof github.getOctokit>,
+    context: GitHubContext,
+    labelName: string,
+    options: SyncOptions
+): Promise<void> {
+
+    if (options.dryRun) {
+
+        core.info(
+            `[Dry Run] Would delete '${labelName}'.`
+        );
+
+        return;
+
+    }
+
+    await octokit.rest.issues.deleteLabel({
+
+        owner: context.owner,
+        repo: context.repo,
+        name: labelName
+
+    });
+
+    core.info(
+        `Deleted '${labelName}'.`
+    );
+
+}

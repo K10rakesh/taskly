@@ -11,7 +11,8 @@ import {
 
 import {
     createLabel,
-    updateLabel
+    updateLabel,
+    deleteLabel
 } from "./github";
 
 async function syncLabels(): Promise<void> {
@@ -94,6 +95,11 @@ async function syncLabels(): Promise<void> {
                 ])
             );
 
+        const desiredLabelNames =
+            new Set(
+                desiredLabels.map(label => label.name)
+            );
+
         core.info(
             `Loaded ${desiredLabels.length} configured labels.`
         );
@@ -105,6 +111,7 @@ async function syncLabels(): Promise<void> {
         let created = 0;
         let updated = 0;
         let skipped = 0;
+        let deleted = 0;
 
         for (const desiredLabel of desiredLabels) {
 
@@ -150,11 +157,35 @@ async function syncLabels(): Promise<void> {
 
         }
 
+        if (prune) {
+
+            for (const existingLabel of existingLabels) {
+
+                if (
+                    desiredLabelNames.has(existingLabel.name)
+                ) {
+                    continue;
+                }
+
+                await deleteLabel(
+                    octokit,
+                    gitHubContext,
+                    existingLabel.name,
+                    options
+                );
+
+                deleted++;
+
+            }
+
+        }
+
         core.info("Synchronization completed.");
 
         core.info(`Created : ${created}`);
         core.info(`Updated : ${updated}`);
         core.info(`Skipped : ${skipped}`);
+        core.info(`Deleted : ${deleted}`);
 
     }
     catch (err) {
