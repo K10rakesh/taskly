@@ -1,6 +1,16 @@
 {
     "labels": [
         {
+            "name": "dependencies",
+            "color": "0366D6",
+            "description": "Dependency updates"
+        },
+        {
+            "name": "security",
+            "color": "B60205",
+            "description": "Security related changes"
+        },
+        {
             "name": "feature",
             "color": "0E8A16",
             "description": "New functionality or enhancement"
