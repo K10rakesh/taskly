@@ -54,7 +54,8 @@
         "[Refactor]:": "refactor",
         "[Chore]:": "chore",
         "[Test]:": "testing",
-        "[Security]:": "security"
+        "[Security]:": "security",
+        "[CI]:": "ci"
     },
 
     "pr": {
@@ -63,7 +64,8 @@
         "docs/": "documentation",
         "refactor/": "refactor",
         "chore/": "chore",
+        "test/": "testing",
         "ci/": "ci",
-        "test/": "testing"
+        "security/": "security"
     }
 }
