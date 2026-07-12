@@ -1,6 +1,31 @@
 {
     "labels": [
         {
+            "name": "size: XS",
+            "color": "009900",
+            "description": "Extra small pull request"
+        },
+        {
+            "name": "size: S",
+            "color": "66CC33",
+            "description": "Small pull request"
+        },
+        {
+            "name": "size: M",
+            "color": "FBCA04",
+            "description": "Medium pull request"
+        },
+        {
+            "name": "size: L",
+            "color": "F9A602",
+            "description": "Large pull request"
+        },
+        {
+            "name": "size: XL",
+            "color": "D73A4A",
+            "description": "Extra large pull request"
+        },
+        {
             "name": "stale",
             "color": "E4E669",
             "description": "Inactive issue or pull request"

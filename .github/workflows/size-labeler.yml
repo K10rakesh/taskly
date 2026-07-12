@@ -1,0 +1,25 @@
+name: PR Size Labeler
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  size-labeler:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Label Pull Request
+        uses: ./.github/actions/size-labeler
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

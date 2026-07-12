@@ -1,0 +1,12 @@
+name: Size Labeler
+
+description: Automatically labels pull requests based on their size.
+
+inputs:
+  github-token:
+    description: GitHub token.
+    required: true
+
+runs:
+  using: node20
+  main: dist/index.js
