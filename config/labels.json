@@ -1,6 +1,11 @@
 {
     "labels": [
         {
+            "name": "stale",
+            "color": "E4E669",
+            "description": "Inactive issue or pull request"
+        },
+        {
             "name": "dependencies",
             "color": "0366D6",
             "description": "Dependency updates"
