@@ -1,7 +1,8 @@
 const Task = require("../models/Task");
 
-const createTask = async (req, res) => {
+const createTaskController = async (req, res) => {
     try{
+        console.log("Controller reached");
         const task = new Task(req.body);
         await task.save();
         res.status(201).json(task);
@@ -14,5 +15,5 @@ const createTask = async (req, res) => {
     }
 }
 
-module.exports = createTask;
+module.exports = createTaskController;
 

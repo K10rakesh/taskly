@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const createTask = require("../controllers/taskController");
+const createTaskController = require("../controllers/taskController");
+const createTaskValidator = require('../validators/task.validator');
+const validationMiddleware = require('../middleware/validation.middleware');
 
-router.post("/", createTask);
+router.post("/", createTaskValidator, validationMiddleware, createTaskController);
 
-module.exports = router;
+module.exports = router; 
